@@ -1,0 +1,20 @@
+{
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "editor.formatOnSave": false,
+    "eslint.validate": [ "vue", "javascript", "javascriptreact", "typescript"],
+    "jest.autoEnable": false,
+    "jest.pathToJest": "npm run test:unit --",
+    "vetur.experimental.templateInterpolationService": true,
+    "vetur.validation.template": true,
+    "vetur.validation.templateProps": true,
+		"workbench.iconTheme": "vscode-icons",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "explorer.confirmDragAndDrop": false,
+    "window.zoomLevel": 1,
+    "bracketPairColorizer.depreciation-notice": false,
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false,
+}
