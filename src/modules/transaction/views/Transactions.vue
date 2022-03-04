@@ -1,5 +1,5 @@
 <template>
-	<div class="transactions__wrapper">
+	<div data-testid="transactions" class="transactions__wrapper">
 
 		<DataTable class="transactions__table" :columns="columns" :loadData="getTransactions" showDivider />
 	</div>
@@ -11,6 +11,8 @@ import { DataTable } from '@warrenbrasil/nebraska-web'
 import { TransactionsService } from '../services/index'
 import { IState } from '../interfaces/ITransaction'
 import SelectTransaction from '../components/SelectTransaction.vue'
+
+import { parseDate, parseAmount, parseStatus } from '../../../helpers/transactions-parse';
 
 const transactionsService = new TransactionsService();
 
@@ -33,11 +35,11 @@ export default class Transactions extends Vue {
 		},
 		{
 			label: 'Data',
-			getter: ({ date }: IState) => this.parseDate(date)
+			getter: ({ date }: IState) => parseDate(date)
 		},
 		{
 			label: 'Valor',
-			getter: ({ amount }: IState) => this.parseAmount(amount)
+			getter: ({ amount }: IState) => parseAmount(amount)
 		},
 		{
 			label: 'Descrição',
@@ -47,7 +49,7 @@ export default class Transactions extends Vue {
 			label: 'Situação',
 			getter: ({ status }: IState) => ({
 				tag: {
-					text: this.parseStatus(status),
+					text: parseStatus(status),
 					error: status === 'cancelled',
 					success: status === 'created',
 					alert: status === 'processing',
@@ -63,37 +65,6 @@ export default class Transactions extends Vue {
 		} catch (error) {
 			console.log({ error });
 		}
-	}
-
-	private parseDate(date: Date): string {
-		const values = date.toString().split('-');
-		return `${values[2]}/${values[1]}/${values[0]}`;
-	}
-
-	private parseAmount(amount: number): string {
-		return amount.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-	}
-
-	private parseStatus(status: string): string {
-		let parsedStatus = '';
-		switch (status) {
-			case 'cancelled':
-				parsedStatus = 'Cancelado';
-				break;
-			case 'created':
-				parsedStatus = 'Concluído';
-				break;
-			case 'processing':
-				parsedStatus = 'Processando';
-				break;
-			case 'processed':
-				parsedStatus = 'Agendado';
-				break;
-			default:
-				break;
-		}
-
-		return parsedStatus;
 	}
 }
 </script>

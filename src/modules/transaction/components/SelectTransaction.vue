@@ -1,5 +1,5 @@
 <template>
-	<td class="select-transaction__wrapper">
+	<td data-testid="select-transaction" class="select-transaction__wrapper">
 		<BaseIcon icon="ic_eye_on" colors="var(--light-brand-primary)" />
 	</td>
 </template>
