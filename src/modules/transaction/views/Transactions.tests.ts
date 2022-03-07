@@ -25,7 +25,7 @@ import { TransactionsService } from '../services/index';
 import { screen } from "@testing-library/dom";
 import { IState } from '../interfaces/ITransaction';
 
-const makeWrapper = () => render(Transactions);
+const getTransactionsSpy = jest.spyOn(TransactionsService.prototype, 'getTransactions');
 
 describe('<Transactions />', () => {
 
@@ -34,29 +34,27 @@ describe('<Transactions />', () => {
   });
 
 	test('should render component', () => {
-		const wrapper = makeWrapper();
+		const { getByTestId } = render(Transactions);
 
-		const transactions = wrapper.getByTestId('transactions');
+		const transactions = getByTestId('transactions');
 
 		expect(transactions).toBeInTheDocument();
 	});
 
 	it('should display element inside table', async () => {
-		jest.spyOn(TransactionsService.prototype, 'getTransactions')
-			.mockResolvedValue(mockApiResponse);
+		getTransactionsSpy.mockResolvedValue(mockApiResponse);
 		
-		const wrapper = makeWrapper();
+		const { findAllByTestId } = render(Transactions);
 
-		const item = await wrapper.findAllByTestId('select-transaction');
+		const item = await findAllByTestId('select-transaction');
 		
-		expect(item.length).toBe(2);
+		expect(item).toHaveLength(2);
   });
 
 	it('should not display element inside table when API call fails', async () => {
-		jest.spyOn(TransactionsService.prototype, 'getTransactions')
-			.mockRejectedValue({ error: 'erro' });
+		getTransactionsSpy.mockRejectedValue({ error: 'erro' });
 		
-		const wrapper = makeWrapper();
+		render(Transactions);
 
 		const item = await screen.findByText('Não há conteúdo para ser mostrado');
 		
