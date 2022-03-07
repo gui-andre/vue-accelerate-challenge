@@ -1,4 +1,4 @@
-export function parseDate(date: Date): string {
+export function parseDate(date: string): string {
 	const values = date.toString().split('-');
 	return `${values[2]}/${values[1]}/${values[0]}`;
 }

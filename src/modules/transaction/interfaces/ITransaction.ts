@@ -4,6 +4,6 @@ export interface IState {
 	description: string
 	status: 'cancelled' | 'created' | 'processing' | 'processed';
 	amount: number
-	date: Date
+	date: string
 	from: string
 }
