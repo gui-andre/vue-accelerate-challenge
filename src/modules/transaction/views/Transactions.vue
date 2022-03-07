@@ -1,7 +1,7 @@
 <template>
 	<div data-testid="transactions" class="transactions__wrapper">
 
-		<DataTable class="transactions__table" :columns="columns" :loadData="getTransactions" showDivider />
+		<DataTable class="transactions__table" :columns="columns" :load-data="getTransactions" showDivider />
 	</div>
 </template>
 
