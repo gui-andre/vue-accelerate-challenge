@@ -13,12 +13,18 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+			"jest",
+			"@testing-library/jest-dom"
     ],
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"],
+			"@/components": ["src/components/*"],
+      "@/router": ["src/router/*"],
+      "@/services": ["src/services/*"],
+      "@/store": ["src/store/*"],
+      "@/types": ["src/types/*"],
+      "@/views": ["src/views/*"]
     },
     "lib": [
       "esnext",
@@ -32,7 +38,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+		"jest.setup.ts"
   ],
   "exclude": [
     "node_modules"
