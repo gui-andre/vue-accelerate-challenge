@@ -48,7 +48,13 @@ export function filterByArrayProperty(singleOptionArr: any[], objectArr: any[], 
 	return responseObj;
 }
 
-export function filterObjectByText(fullList: any[], model: string, filteredList: any[]): IState[] {
+export function filterTransactionsList(fullList: IState[], filteredList: IState[], textFilter: string, statusFilter: string[]): IState[] {
+	const textFilteredList = filterObjectByText(fullList, textFilter, filteredList);
+	const statusFilterList = filterObjectByStatus(statusFilter, textFilteredList);
+	return statusFilterList;
+}
+
+export function filterObjectByText(fullList: IState[], model: string, filteredList: IState[]): IState[] {
 	let response;
 	if (shouldReturnFullList(model, filteredList)) {
 		response = JSON.parse(JSON.stringify(fullList));
@@ -63,7 +69,7 @@ export function filterObjectByText(fullList: any[], model: string, filteredList:
 	return response;
 }
 
-export function filterObjectByStatus(selectedStatus: string[], list: any[]): IState[] {
+export function filterObjectByStatus(selectedStatus: string[], list: IState[]): IState[] {
 	let response;
 	if (!selectedStatus.length) {
 		response = list;

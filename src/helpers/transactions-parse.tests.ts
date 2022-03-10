@@ -1,5 +1,5 @@
 import { IState } from '@/modules/transaction/interfaces/ITransaction';
-import { parseDate, parseAmount, parseStatus, filterByArrayProperty, filterObjectByText, filterObjectByStatus } from './transactions-parse';
+import { parseDate, parseAmount, parseStatus, filterByArrayProperty, filterObjectByText, filterObjectByStatus, filterTransactionsList } from './transactions-parse';
 
 const arr: string[] = ['created', 'cancelled'];
 
@@ -71,4 +71,13 @@ describe('transations-parse', () => {
 		expect(response).toEqual([objArr[1]]);
 	});
 
+	it('should call filterTransactionsList and return filtered list', () => {
+		const response = filterTransactionsList(objArr, objArr, 'resg', ['processing']);
+		expect(response).toEqual([objArr[0]]);
+	});
+
+	it('should call filterTransactionsList and return empty list', () => {
+		const response = filterTransactionsList(objArr, objArr, 'resg', ['created']);
+		expect(response).toEqual([]);
+	});
 })

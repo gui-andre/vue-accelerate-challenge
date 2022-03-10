@@ -4,7 +4,7 @@
       <Input
         class="transactions__filter__input"
         @model="filterByInput"
-        :value="filterValue"
+        :value="textFilterValue"
         left-icon-name="ic_search"
         :placeholder="'Busque pelo título'"
       />
@@ -39,8 +39,7 @@ import {
   parseDate,
   parseAmount,
   parseStatus,
-  filterObjectByText,
-  filterObjectByStatus,
+  filterTransactionsList,
 } from "../../../helpers/transactions-parse";
 
 const transactionsService = new TransactionsService();
@@ -56,7 +55,8 @@ const transactionsService = new TransactionsService();
 export default class Transactions extends Vue {
   private transactionsList: IState[] = [];
   public transactions: IState[] = [];
-  public filterValue = "";
+  public textFilterValue = "";
+  public statusFilterValue: string[] = [];
   public readonly filterOptions: ISelectCheckboxOption[] = [
     {
       text: "Cancelado",
@@ -128,21 +128,25 @@ export default class Transactions extends Vue {
   }
 
   public filterByInput(model: string) {
-    this.filterValue = model;
+    this.textFilterValue = model;
 
-    this.transactions = filterObjectByText(
+		this.transactions = filterTransactionsList(
       this.transactionsList,
-      model,
-      this.transactions
+      this.transactions,
+      this.textFilterValue,
+      this.statusFilterValue
     );
   }
 
   public filterByStatus(selectedStatus: string[]) {
+    this.statusFilterValue = selectedStatus;
     if (!this.transactionsList) return;
 
-    this.transactions = filterObjectByStatus(
-      selectedStatus,
-      this.transactionsList
+    this.transactions = filterTransactionsList(
+      this.transactionsList,
+      this.transactions,
+      this.textFilterValue,
+      this.statusFilterValue
     );
   }
 }
