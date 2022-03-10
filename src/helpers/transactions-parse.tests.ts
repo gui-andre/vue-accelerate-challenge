@@ -1,4 +1,28 @@
-import { parseDate, parseAmount, parseStatus } from './transactions-parse';
+import { IState } from '@/modules/transaction/interfaces/ITransaction';
+import { parseDate, parseAmount, parseStatus, filterByArrayProperty, filterObjectByText, filterObjectByStatus } from './transactions-parse';
+
+const arr: string[] = ['created', 'cancelled'];
+
+const objArr: IState[] = [
+	{
+		id: '1',
+		title: 'Resgate',
+		description: 'Mock Description',
+		status: 'processing',
+		amount: 10000,
+		date: '2022/02/14',
+		from: 'Mock From',
+	},
+	{
+		id: '2',
+		title: 'Segundo',
+		description: 'Mock Description',
+		status: 'created',
+		amount: 15000,
+		date: '2022/02/17',
+		from: 'Mock From',
+	}
+]
 
 describe('transations-parse', () => {
 
@@ -16,4 +40,35 @@ describe('transations-parse', () => {
 		const response = parseStatus('created');
 		expect(response).toBe('Concluído');
 	});
+
+	it('should call filterByArrayProperty and return filtered array', () => {
+		const response = filterByArrayProperty(arr, objArr, 'status');
+		expect(response).toEqual([objArr[1]]);
+	});
+
+	it('should call filterByArrayProperty and return filtered property', () => {
+		const response = filterByArrayProperty(arr, objArr, 'status', 'title');
+		expect(response).toEqual(['Segundo']);
+	});
+
+	it('should should call filterObjectByText and return full list', () => {
+		const response = filterObjectByText(objArr, '', [objArr[1]]);
+		expect(response).toEqual(objArr);
+	});
+
+	it('should should call filterObjectByText and return filtered list', () => {
+		const response = filterObjectByText(objArr, 'resg', objArr);
+		expect(response).toEqual([objArr[0]]);
+	});
+
+	it('should should call filterObjectByStatus and return full list', () => {
+		const response = filterObjectByStatus([], objArr);
+		expect(response).toEqual(objArr);
+	});
+
+	it('should should call filterObjectByStatus and return filtered list', () => {
+		const response = filterObjectByStatus(['created'], objArr);
+		expect(response).toEqual([objArr[1]]);
+	});
+
 })
