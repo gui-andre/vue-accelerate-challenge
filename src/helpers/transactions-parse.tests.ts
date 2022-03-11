@@ -1,6 +1,6 @@
-import { ISelectCheckboxOption } from '@/modules/transaction/interfaces/ISelectCheckboxOption';
-import { IState } from '@/modules/transaction/interfaces/ITransaction';
-import { parseDate, parseAmount, parseStatus, filterObjectByText, filterObjectByStatus, filterTransactionsList, getSelectedCheckboxText } from './transactions-parse';
+import { ISelectCheckboxOption } from '@/types/ISelectCheckboxOption';
+import { IState } from '@/types/ITransaction';
+import { parseDate, parseAmount, parseStatus, filterTransactionsByDescription, filterTransactionsByStatus, filterTransactions, getSelectedCheckboxText } from './transactions-parse';
 
 const arr: string[] = ['created', 'cancelled'];
 
@@ -60,33 +60,33 @@ describe('transations-parse', () => {
 		expect(response).toEqual(['Cancelado', 'Concluído']);
 	});
 
-	it('should should call filterObjectByText and return full list', () => {
-		const response = filterObjectByText(objArr, '', [objArr[1]]);
+	it('should should call filterTransactionsByDescription and return full list', () => {
+		const response = filterTransactionsByDescription(objArr, '', [objArr[1]]);
 		expect(response).toEqual(objArr);
 	});
 
-	it('should should call filterObjectByText and return filtered list', () => {
-		const response = filterObjectByText(objArr, 'resg', objArr);
+	it('should should call filterTransactionsByDescription and return filtered list', () => {
+		const response = filterTransactionsByDescription(objArr, 'resg', objArr);
 		expect(response).toEqual([objArr[0]]);
 	});
 
-	it('should should call filterObjectByStatus and return full list', () => {
-		const response = filterObjectByStatus([], objArr);
+	it('should should call filterTransactionsByStatus and return full list', () => {
+		const response = filterTransactionsByStatus([], objArr);
 		expect(response).toEqual(objArr);
 	});
 
-	it('should should call filterObjectByStatus and return filtered list', () => {
-		const response = filterObjectByStatus(['created'], objArr);
+	it('should should call filterTransactionsByStatus and return filtered list', () => {
+		const response = filterTransactionsByStatus(['created'], objArr);
 		expect(response).toEqual([objArr[1]]);
 	});
 
-	it('should call filterTransactionsList and return filtered list', () => {
-		const response = filterTransactionsList(objArr, objArr, 'resg', ['processing']);
+	it('should call filterTransactions and return filtered list', () => {
+		const response = filterTransactions(objArr, objArr, 'resg', ['processing']);
 		expect(response).toEqual([objArr[0]]);
 	});
 
-	it('should call filterTransactionsList and return empty list', () => {
-		const response = filterTransactionsList(objArr, objArr, 'resg', ['created']);
+	it('should call filterTransactions and return empty list', () => {
+		const response = filterTransactions(objArr, objArr, 'resg', ['created']);
 		expect(response).toEqual([]);
 	});
 })

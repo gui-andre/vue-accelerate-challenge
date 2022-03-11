@@ -1,12 +1,12 @@
 <template>
-	<div data-testid="select-checkbox" class="select-checkbox__wrapper" :class="{'select-checkbox__oppened': showOptions}">
-		<span class="select-checkbox__itens" @click="toggleOptions()">
+	<div data-testid="select-checkbox" class="select-checkbox__wrapper" :class="{'select-checkbox__oppened': showDropdown}">
+		<span class="select-checkbox__itens" @click="toggleDropdown()">
 			<BaseIcon class="select-checkbox__icon" icon="ic_filter_list" colors="var(--element-primary)"/>
-			<div v-if="selectedValues.length" class="select-checkbox__label">{{ selectedTexts.join(', ') }}</div>
+			<div v-if="selectedOptions.length" class="select-checkbox__label">{{ selectedTexts.join(', ') }}</div>
 			<div v-else class="select-checkbox__label">{{ label }}</div>
 		</span>
-		<div data-testid="select-checkbox-itens" v-if="showOptions" class="select-checkbox__list__wrapper">
-			<Checkbox v-for="option in filterOptions" :key="option.value" :value="option.value" v-model="selectedValues">{{ option.text }}</Checkbox>
+		<div data-testid="select-checkbox-itens" v-if="showDropdown" class="select-checkbox__list__wrapper">
+			<Checkbox v-for="option in filterOptions" :key="option.value" :value="option.value" v-model="selectedOptions">{{ option.text }}</Checkbox>
 		</div>
 	</div>
 </template>
@@ -14,7 +14,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, PropSync, Emit, Watch } from 'vue-property-decorator';
 import { BaseIcon, Checkbox } from '@warrenbrasil/nebraska-web';
-import { ISelectCheckboxOption } from '../interfaces/ISelectCheckboxOption';
+import { ISelectCheckboxOption } from '../../../types/ISelectCheckboxOption';
 import { getSelectedCheckboxText } from '../../../helpers/transactions-parse';
 
 @Component({
@@ -30,23 +30,24 @@ export default class SelectCheckbox extends Vue {
 	@PropSync('options', { required: true, type: Array })
 	public filterOptions!: ISelectCheckboxOption[];
 
-	public showOptions = false;
-	public selectedValues: string[] = [];
+	public showDropdown = false;
+	
+	public selectedOptions: string[] = [];
 	public selectedTexts: string[] = [];
 
-	public toggleOptions() {
-		this.showOptions = !this.showOptions;
+	private toggleDropdown() {
+		this.showDropdown = !this.showDropdown;
 	}
 
-	@Watch('selectedValues')
-	private emitSelectedOptions(val: string[], oldVal: string[]) {
-		this.selectedTexts = getSelectedCheckboxText(val, this.filterOptions);
-		this.selectedOptions(val);
+	@Watch('selectedOptions')
+	private watchSelectedOptions(selectedOptions: string[]) {
+		this.selectedTexts = getSelectedCheckboxText(selectedOptions, this.filterOptions);
+		this.emitSelectedOptions(selectedOptions);
 	}
 
-	@Emit()
-  private selectedOptions(emitVal: string[]) {
-    return emitVal;
+	@Emit('selected-options')
+  private emitSelectedOptions(selectedOptions: string[]) {
+    return selectedOptions;
   }
 
 }

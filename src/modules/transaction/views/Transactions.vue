@@ -30,8 +30,8 @@
 import { Component, Vue } from "vue-property-decorator";
 import { DataTable, Input } from "@warrenbrasil/nebraska-web";
 import { TransactionsService } from "../services/index";
-import { IState } from "../interfaces/ITransaction";
-import { ISelectCheckboxOption } from "../interfaces/ISelectCheckboxOption";
+import { IState } from "../../../types/ITransaction";
+import { ISelectCheckboxOption } from "../../../types/ISelectCheckboxOption";
 import SelectTransaction from "../components/SelectTransaction.vue";
 import SelectCheckbox from "../components/SelectCheckbox.vue";
 
@@ -39,7 +39,7 @@ import {
   parseDate,
   parseAmount,
   parseStatus,
-  filterTransactionsList,
+  filterTransactions,
 } from "../../../helpers/transactions-parse";
 
 const transactionsService = new TransactionsService();
@@ -127,10 +127,10 @@ export default class Transactions extends Vue {
     }
   }
 
-  public filterByInput(model: string) {
-    this.textFilterValue = model;
+  public filterByInput(searchedDescription: string) {
+    this.textFilterValue = searchedDescription;
 
-		this.transactions = filterTransactionsList(
+		this.transactions = filterTransactions(
       this.transactionsList,
       this.transactions,
       this.textFilterValue,
@@ -142,7 +142,7 @@ export default class Transactions extends Vue {
     this.statusFilterValue = selectedStatus;
     if (!this.transactionsList) return;
 
-    this.transactions = filterTransactionsList(
+    this.transactions = filterTransactions(
       this.transactionsList,
       this.transactions,
       this.textFilterValue,
