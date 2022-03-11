@@ -1,7 +1,21 @@
+import { ISelectCheckboxOption } from '@/modules/transaction/interfaces/ISelectCheckboxOption';
 import { IState } from '@/modules/transaction/interfaces/ITransaction';
-import { parseDate, parseAmount, parseStatus, filterByArrayProperty, filterObjectByText, filterObjectByStatus, filterTransactionsList } from './transactions-parse';
+import { parseDate, parseAmount, parseStatus, filterObjectByText, filterObjectByStatus, filterTransactionsList, getSelectedCheckboxText } from './transactions-parse';
 
 const arr: string[] = ['created', 'cancelled'];
+
+const filterOptions: ISelectCheckboxOption[] = [
+	{
+		text: "Cancelado",
+		value: "cancelled",
+		checked: false,
+	},
+	{
+		text: "Concluído",
+		value: "created",
+		checked: false,
+	},
+];
 
 const objArr: IState[] = [
 	{
@@ -41,14 +55,9 @@ describe('transations-parse', () => {
 		expect(response).toBe('Concluído');
 	});
 
-	it('should call filterByArrayProperty and return filtered array', () => {
-		const response = filterByArrayProperty(arr, objArr, 'status');
-		expect(response).toEqual([objArr[1]]);
-	});
-
-	it('should call filterByArrayProperty and return filtered property', () => {
-		const response = filterByArrayProperty(arr, objArr, 'status', 'title');
-		expect(response).toEqual(['Segundo']);
+	it('should call getSelectedCheckboxText and return filtered array', () => {
+		const response = getSelectedCheckboxText(arr, filterOptions);
+		expect(response).toEqual(['Cancelado', 'Concluído']);
 	});
 
 	it('should should call filterObjectByText and return full list', () => {

@@ -15,7 +15,7 @@
 import { Component, Vue, Prop, PropSync, Emit, Watch } from 'vue-property-decorator';
 import { BaseIcon, Checkbox } from '@warrenbrasil/nebraska-web';
 import { ISelectCheckboxOption } from '../interfaces/ISelectCheckboxOption';
-import { filterByArrayProperty } from '../../../helpers/transactions-parse';
+import { getSelectedCheckboxText } from '../../../helpers/transactions-parse';
 
 @Component({
 	components: {
@@ -40,7 +40,7 @@ export default class SelectCheckbox extends Vue {
 
 	@Watch('selectedValues')
 	private emitSelectedOptions(val: string[], oldVal: string[]) {
-		this.selectedTexts = filterByArrayProperty(val, this.filterOptions, 'value', 'text')
+		this.selectedTexts = getSelectedCheckboxText(val, this.filterOptions);
 		this.selectedOptions(val);
 	}
 

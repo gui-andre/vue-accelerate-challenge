@@ -67,7 +67,7 @@ describe('<SelectCheckbox>', () => {
 		await fireEvent.click(concluido);
 		await fireEvent.click(cancelado);
 
-		const labelAfter = queryByText('Concluído, Cancelado');
+		const labelAfter = queryByText('Cancelado, Concluído');
 
 		expect(labelAfter).toBeInTheDocument();
 	});

@@ -1,3 +1,4 @@
+import { ISelectCheckboxOption } from "@/modules/transaction/interfaces/ISelectCheckboxOption";
 import { IState } from "@/modules/transaction/interfaces/ITransaction";
 
 export function parseDate(date: string): string {
@@ -31,21 +32,13 @@ export function parseStatus(status: string): string {
 	return parsedStatus;
 }
 
-export function filterByArrayProperty(singleOptionArr: any[], objectArr: any[], objectParam: string, singleParam?: string) {
-	const responseObj: any[] = [];
-	singleOptionArr.forEach(opt => {
-		objectArr.forEach(obj => {
-			if (opt === obj[objectParam]) {
-				if (singleParam) {
-					responseObj.push(obj[singleParam]);
-				} else {
-					responseObj.push(obj);
-				}
-			}
-		})
+export function getSelectedCheckboxText(statusValueArr: string[], checkboxOptions: ISelectCheckboxOption[]): string[] {
+	const response: string[] = []
+	checkboxOptions.forEach(option => {
+		if (statusValueArr.includes(option.value)) response.push(option.text);
 	});
-
-	return responseObj;
+	
+	return response;
 }
 
 export function filterTransactionsList(fullList: IState[], filteredList: IState[], textFilter: string, statusFilter: string[]): IState[] {
@@ -57,33 +50,28 @@ export function filterTransactionsList(fullList: IState[], filteredList: IState[
 export function filterObjectByText(fullList: IState[], model: string, filteredList: IState[]): IState[] {
 	let response;
 	if (shouldReturnFullList(model, filteredList)) {
-		response = JSON.parse(JSON.stringify(fullList));
+		response = fullList;
 	} else {
-		const filter = fullList?.filter(transaction => {
-			const value = transaction.title.toUpperCase().includes(model.toUpperCase());
-			return value;
-		});
+		const filter = fullList?.filter(transaction => transaction.title.toUpperCase().includes(model.toUpperCase()));
 		response = filter ? filter : [];
 	}
 
 	return response;
 }
 
-export function filterObjectByStatus(selectedStatus: string[], list: IState[]): IState[] {
-	let response;
-	if (!selectedStatus.length) {
-		response = list;
-	} else {
-		response = filterByArrayProperty(
-			selectedStatus,
-			list,
-			"status"
-		);
-	}
+export function filterObjectByStatus(selectedStatus: string[], transactionsList: IState[]): IState[] {
+	let response: IState[] = [];
 
+	if (!selectedStatus.length) {
+		response = transactionsList;
+	} else {
+		transactionsList.forEach(transaction => {
+			if (selectedStatus.includes(transaction.status)) response.push(transaction);
+		});
+	}
 	return response;
 }
 
-function shouldReturnFullList(model: any, list: any[]): boolean {
+function shouldReturnFullList(model: string, list: IState[]): boolean {
 	return !model || (list?.length === 0 && !model)
 }
