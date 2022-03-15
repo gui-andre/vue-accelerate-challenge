@@ -56,7 +56,7 @@ describe('<Transactions />', () => {
 		
 		render(Transactions);
 
-		const item = await screen.findByText('Não há conteúdo para ser mostrado');
+		const item = await screen.findByText('Nenhum dado pode ser mostrado');
 		
 		expect(item).toBeTruthy();
   });

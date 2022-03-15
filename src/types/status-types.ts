@@ -1,0 +1,1 @@
+export type StatusOptions = 'cancelled' | 'created' | 'processing' | 'processed';
